@@ -36,7 +36,7 @@ public class LionTest {
 
     @Test
     public void getKittensShouldReturnValueFromFelineTest() throws Exception {
-        int expectedKittensCount = 3;
+        int expectedKittensCount = 1;
         Mockito.when(feline.getKittens()).thenReturn(expectedKittensCount);
 
         int actualKittensCount = lion.getKittens();
