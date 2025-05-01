@@ -1,34 +1,53 @@
 package com.example;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
 public class FelineTest {
 
-    @Test
-    public void eatMeatReturnsFoodList() throws Exception {
-        Feline feline = new Feline();
-        List<String> food = feline.eatMeat();
-        Assert.assertEquals(List.of("Животные", "Птицы", "Рыба"), food);
+    private Feline feline;
+
+    @Before
+    public void setUp() {
+        feline = new Feline();
     }
 
     @Test
-    public void getFamilyReturnsFelineFamily() {
-        Feline feline = new Feline();
-        Assert.assertEquals("Кошачьи", feline.getFamily());
+    public void eatMeatReturnsPredatorFoodListTest() throws Exception {
+        List<String> expectedFood = List.of("Животные", "Птицы", "Рыба");
+        List<String> actualFood = feline.eatMeat();
+        Assert.assertEquals("Хищники должны питаться: Животными, Птицами, Рыбами",
+                expectedFood,
+                actualFood);
     }
 
     @Test
-    public void getKittensDefaultReturnsOne() {
-        Feline feline = new Feline();
-        Assert.assertEquals(1, feline.getKittens());
+    public void getFamilyReturnsFelineFamilyTest() {
+        String expectedFamily = "Кошачьи";
+        String actualFamily = feline.getFamily();
+        Assert.assertEquals("Семейство должно быть: 'Кошачьи'",
+                expectedFamily,
+                actualFamily);
     }
 
     @Test
-    public void getKittensReturnsCorrectNumber() {
-        Feline feline = new Feline();
-        Assert.assertEquals(5, feline.getKittens(5));
+    public void getKittensDefaultReturnsOneTest() {
+        int expectedKittens = 1;
+        int actualKittens = feline.getKittens();
+        Assert.assertEquals("По умолчанию должно возвращаться котят: 1",
+                expectedKittens,
+                actualKittens);
+    }
+
+    @Test
+    public void getKittensWithParameterReturnsCorrectNumberTest() {
+        int expectedCount = 5;
+        int actualCount = feline.getKittens(expectedCount);
+        Assert.assertEquals("Должно возвращаться: n котят",
+                expectedCount,
+                actualCount);
     }
 }

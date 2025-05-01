@@ -1,6 +1,7 @@
 package com.example;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -11,13 +12,14 @@ public class LionParameterizedTest {
 
     private final String sex;
     private final boolean expectedHasMane;
+    private Feline feline;
 
     public LionParameterizedTest(String sex, boolean expectedHasMane) {
         this.sex = sex;
         this.expectedHasMane = expectedHasMane;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Пол: {0}, Наличие гривы: {1}")
     public static Object[][] getSexData() {
         return new Object[][] {
                 {"Самец", true},
@@ -25,10 +27,19 @@ public class LionParameterizedTest {
         };
     }
 
+    @Before
+    public void setUp() {
+        feline = Mockito.mock(Feline.class);
+    }
+
     @Test
-    public void testDoesHaveMane() throws Exception {
-        Feline feline = Mockito.mock(Feline.class);
+    public void doesHaveManeTest() throws Exception {
         Lion lion = new Lion(sex, feline);
-        Assert.assertEquals(expectedHasMane, lion.doesHaveMane());
+        boolean actualHasMane = lion.doesHaveMane();
+        Assert.assertEquals(
+                String.format("Для пола '%s' наличие гривы должно быть %s", sex, expectedHasMane),
+                expectedHasMane,
+                actualHasMane
+        );
     }
 }

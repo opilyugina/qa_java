@@ -1,6 +1,7 @@
 package com.example;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -8,39 +9,45 @@ import java.util.List;
 
 public class LionTest {
 
-    @Test
-    public void doesHaveManeReturnsTrueForMale() throws Exception {
-        Feline feline = Mockito.mock(Feline.class);
-        Lion lion = new Lion("Самец", feline);
-        Assert.assertTrue(lion.doesHaveMane());
-    }
+    private Feline feline;
+    private Lion lion;
 
-    @Test
-    public void doesHaveManeReturnsFalseForFemale() throws Exception {
-        Feline feline = Mockito.mock(Feline.class);
-        Lion lion = new Lion("Самка", feline);
-        Assert.assertFalse(lion.doesHaveMane());
+    @Before
+    public void setUp() throws Exception {
+        feline = Mockito.mock(Feline.class);
+        lion = new Lion("Самец", feline);
     }
 
     @Test(expected = Exception.class)
-    public void exceptionThrownForInvalidSex() throws Exception {
-        Feline feline = Mockito.mock(Feline.class);
-        new Lion("Неведомое", feline);
+    public void constructorShouldThrowExceptionForInvalidGenderTest() throws Exception {
+        new Lion("Недопустимое значение, используйте: Самец или Самка", feline);
     }
 
     @Test
-    public void getFoodReturnsPredatorFood() throws Exception {
-        Feline feline = Mockito.mock(Feline.class);
-        Mockito.when(feline.getFood("Хищник")).thenReturn(List.of("Животные", "Птицы", "Рыба"));
-        Lion lion = new Lion("Самец", feline);
-        Assert.assertEquals(List.of("Животные", "Птицы", "Рыба"), lion.getFood());
+    public void getFoodShouldReturnPredatorFoodListTest() throws Exception {
+        List<String> expectedFood = List.of("Животные", "Птицы", "Рыба");
+        Mockito.when(feline.getFood("Хищник")).thenReturn(expectedFood);
+
+        List<String> actualFood = lion.getFood();
+        Assert.assertEquals("Лев как хищник должен питаться: Животными, Птицами, Рыбами",
+                expectedFood,
+                actualFood);
     }
 
     @Test
-    public void getKittensReturnsCorrectValue() throws Exception {
-        Feline feline = Mockito.mock(Feline.class);
-        Mockito.when(feline.getKittens()).thenReturn(3);
-        Lion lion = new Lion("Самец", feline);
-        Assert.assertEquals(3, lion.getKittens());
+    public void getKittensShouldReturnValueFromFelineTest() throws Exception {
+        int expectedKittensCount = 3;
+        Mockito.when(feline.getKittens()).thenReturn(expectedKittensCount);
+
+        int actualKittensCount = lion.getKittens();
+        Assert.assertEquals("Количество котят должно совпадать с возвращаемым значением Feline",
+                expectedKittensCount,
+                actualKittensCount);
+    }
+
+    @Test
+    public void getFoodShouldCallFelineWithPredatorArgumentTest() throws Exception {
+        lion.getFood();
+        Mockito.verify(feline).getFood("Хищник");
     }
 }
